@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.faith.pojo.Blog;
 import com.faith.service.inter.IBlogService;
@@ -53,8 +54,8 @@ public class BlogController {
 	
 	//删除文章
 	@RequestMapping(path="/manage_blog/delete/{blog_Id}", method = RequestMethod.GET)
-	public String del_blog(@PathVariable String blog_id,Model model){
-		model.addAttribute("flag",bloSer.delete(blog_id)?"删除成功":"删除失败！");
+	public String del_blog(@PathVariable String blog_id, RedirectAttributes attr){		
+		attr.addAttribute("flag",bloSer.delete(blog_id)?"删除成功":"删除失败！");//带参数重定向
 		return "redirect:/manage_blog/list";
 	}
 	
