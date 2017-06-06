@@ -11,19 +11,19 @@ import org.springframework.transaction.annotation.Transactional;
 import com.faith.dao.inter.IBlogDao;
 import com.faith.pojo.Blog;
 
-@Transactional(rollbackFor={RuntimeException.class, Exception.class})
 @Repository
 public class BlogDao extends HibernateDaoSupport implements IBlogDao {
 
 	@Override
-	public boolean add(Blog entity) {
+	public Blog add(Blog entity) {
+		String saveId = null;
 		try{
-			getHibernateTemplate().save(entity);
+			saveId = (String) getHibernateTemplate().save(entity);
 		}
 		catch (DataAccessException e) {
-			return false;
+			return new Blog();
 		}
-		return true;
+		return findById(saveId);
 	}
 
 	@Override
@@ -38,7 +38,8 @@ public class BlogDao extends HibernateDaoSupport implements IBlogDao {
 
 	@Override
 	public Blog findById(String id) {
-		List<?> result= getHibernateTemplate().findByNamedParam("from Blog where blog_id = :blog_id", "blog_id", id);
+		List<?> result= getHibernateTemplate().findByNamedParam
+				("from Blog where blog_id = :blog_id order by blog_ctime desc", "blog_id", id);
 		if(result.size()>=1) 
 			return (Blog) result.get(0);
 		else 
@@ -57,7 +58,17 @@ public class BlogDao extends HibernateDaoSupport implements IBlogDao {
 
 	@Override
 	public List<Blog> findByTitle(String title) {
-		List<?> result= getHibernateTemplate().findByNamedParam("from Blog where title like '%:title%'", "title", title);
+		List<?> result= getHibernateTemplate().findByNamedParam
+				("from Blog where title like ':title' order by blog_ctime desc", "title", '%'+title+'%');
+		if(result.size()>=1) 
+			return (List<Blog>) result;
+		else 
+			return new ArrayList<Blog>();
+	}
+
+	@Override
+	public List<Blog> findAll() {
+		List<?> result= getHibernateTemplate().find("from Blog order by blog_ctime desc");
 		if(result.size()>=1) 
 			return (List<Blog>) result;
 		else 
