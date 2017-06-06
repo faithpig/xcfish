@@ -7,7 +7,7 @@ import com.faith.pojo.Blog;
 public interface IBlogService {
 	Blog save(Blog b);
 	boolean update(Blog b);
-	boolean delete(Blog b);
+	boolean delete(String id);
 	Blog findById(String id);
 	List<Blog> findAll();
 }

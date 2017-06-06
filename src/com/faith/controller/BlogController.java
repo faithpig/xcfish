@@ -53,7 +53,8 @@ public class BlogController {
 	
 	//删除文章
 	@RequestMapping(path="/manage_blog/delete/{blog_Id}", method = RequestMethod.GET)
-	public String del_blog(@PathVariable String blog_id){
+	public String del_blog(@PathVariable String blog_id,Model model){
+		model.addAttribute("flag",bloSer.delete(blog_id)?"删除成功":"删除失败！");
 		return "redirect:/manage_blog/list";
 	}
 	

@@ -26,8 +26,8 @@ public class BlogService implements IBlogService{
 	}
 
 	@Override
-	public boolean delete(Blog b) {
-		return bloDao.delete(b.getBlog_id());
+	public boolean delete(String id) {
+		return bloDao.delete(id);
 	}
 
 	@Override
