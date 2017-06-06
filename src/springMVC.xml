@@ -21,6 +21,12 @@ xsi:schemaLocation="
 <!-- 自动扫描controller包中的控制器 -->
 <context:component-scan base-package="com.faith.controller" />
 
+ <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" id="internalResourceViewResolver">
+     <!-- 前缀 -->
+     <property name="prefix" value="/WEB-INF/views/" />
+     <!-- 后缀 -->
+     <property name="suffix" value=".jsp" />
+ </bean>
 
 <!-- 上传文件拦截，设置最大上传文件大小 30M=30*1024*1024(B)=31457280 bytes -->
 <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
