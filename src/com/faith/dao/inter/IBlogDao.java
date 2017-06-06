@@ -1,4 +1,4 @@
-package com.fatih.dao.inter;
+package com.faith.dao.inter;
 
 import java.util.List;
 import com.faith.pojo.Blog;

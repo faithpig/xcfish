@@ -1,4 +1,4 @@
-package com.fatih.dao.inter;
+package com.faith.dao.inter;
 
 public interface IBaseDao<T> {
 	boolean add(T entity);

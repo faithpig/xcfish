@@ -1,9 +1,9 @@
-package com.fatih.service;
+package com.faith.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fatih.dao.inter.IBlogDao;
+import com.faith.dao.inter.IBlogDao;
 
 
 

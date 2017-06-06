@@ -1,4 +1,4 @@
-package com.fatih.service;
+package com.faith.service;
 
 public class PhotoServcie {
 

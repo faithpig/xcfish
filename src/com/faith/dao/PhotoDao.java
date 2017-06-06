@@ -1,4 +1,4 @@
-package com.fatih.dao;
+package com.faith.dao;
 
 public class PhotoDao {
 
