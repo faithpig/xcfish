@@ -1,5 +1,7 @@
 package com.faith.controller;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -31,7 +34,10 @@ public class BlogController {
 	//查看单个文章
 	@RequestMapping(path="/blog/{blog_Id}", method = RequestMethod.GET)
 	public String blog_detail(@PathVariable String blog_id,Model model){
-		model.addAttribute("blog",bloSer.findById(blog_id));
+		Blog b = bloSer.findById(blog_id);
+		model.addAttribute("blog", b);
+		b.setBlog_vnum(b.getBlog_vnum()+1);
+		bloSer.update(b);
 		return "blog_detail";
 	}
 	
@@ -45,9 +51,14 @@ public class BlogController {
 	//添加文章
 	@RequestMapping(path="/manage_blog/add", method = RequestMethod.POST)
 	public String add_blog(Blog b,Model model){
-		if(b==null||bloSer.save(b).getBlog_id()==null){
+		if(b!=null) {
+			b.setBlog_ctime(new Date());
+			b.setBlog_vnum(0);
+			b = bloSer.save(b);
+			model.addAttribute("flag",b.getBlog_id()!=null?"添加成功":"添加失败！");
+		}else{
 			model.addAttribute("blog",b);
-			return "add_form";
+			return "manage/admin";
 		}
 		return "redirect:/manage_blog/list";
 	}
@@ -61,10 +72,14 @@ public class BlogController {
 	
 	//更新文章
 	@RequestMapping(path="/manage_blog/update", method = RequestMethod.POST)
-	public String upd_blog(Blog b,Model model){
-		if(b==null||!bloSer.update(b)){
+	public String upd_blog(Blog b,Model model){//requestbody注解可自动解析前台传来的json对象为javabean对象
+		if(b!=null) {
+			b.setBlog_utime(new Date());
+			model.addAttribute("flag",bloSer.update(b)?"更新成功":"更新失败！");
+		}
+		else{
 			model.addAttribute("blog",b);
-			return "add_form";
+			return "manage/admin";
 		}
 		return "redirect:/manage_blog/list";
 	}

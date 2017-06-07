@@ -3,15 +3,19 @@ package com.faith.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
-import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
+import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.faith.dao.inter.IBlogDao;
 import com.faith.pojo.Blog;
 
 @Repository("blogDao")
-public class BlogDao extends HibernateDaoSupport implements IBlogDao {
+public class BlogDao implements IBlogDao {
+	
+	private HibernateTemplate hibernateTemplate;
 
 	@Override
 	public Blog add(Blog entity) {
@@ -72,6 +76,17 @@ public class BlogDao extends HibernateDaoSupport implements IBlogDao {
 			return (List<Blog>) result;
 		else 
 			return new ArrayList<Blog>();
+	}
+
+	
+	public HibernateTemplate getHibernateTemplate() {
+		return this.hibernateTemplate;
+	}
+
+	@Autowired
+	@Qualifier("hibernateTemplate")
+	public void setHibernateTemplate(HibernateTemplate hibernateTemplate) {
+		this.hibernateTemplate = hibernateTemplate;
 	}
 	
 }

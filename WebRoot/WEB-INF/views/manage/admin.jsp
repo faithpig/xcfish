@@ -4,7 +4,7 @@ String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,7 +27,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div data-options="region:'north'" style="height:50px"></div>
 		<div data-options="region:'south',split:true" style="height:50px;"></div>
 		<div data-options="region:'east',split:true" title="East" style="width:180px;">
-			<ul class="easyui-tree" data-options="url:'tree_data1.json',method:'get',animate:true,dnd:true"></ul>
+			<ul class="easyui-tree" data-options="url:'',method:'get',animate:true,dnd:true"></ul>
 		</div>
 		<div data-options="region:'west',split:true" title="导航窗格" style="width:180px;">
 			<div class="easyui-accordion" data-options="fit:true,border:false">
@@ -86,18 +86,15 @@ function doSearch(){
 }
 </script>
 </div>
-<table id="tt" class="easyui-datagrid" style="width:950px;height:400px"
-		url=""
-		title="Load Data" iconCls="icon-save"
-		rownumbers="true" pagination="true">
+<table id="tt" class="easyui-datagrid" style="width:950px;height:400px" url="" title="Load Data" iconCls="icon-save" rownumbers="true" pagination="true">
 	<thead>
 		<tr>
 			
 			<th field="选择" width="30"></th>
 			
-			<th field="文章标题" width="350" align="center">文章标题</th>
-			<th field="创建时间" width="90" align="center">创建时间</th>
-			<th field="更新时间" width="90" align="center">更新时间</th>
+			<th field="文章标题" width="340" align="center">文章标题</th>
+			<th field="创建时间" width="95" align="center">创建时间</th>
+			<th field="更新时间" width="95" align="center">更新时间</th>
 			<th field="浏览量" width="50" align="center">浏览量</th>
 			<th field="文章id" width="300" align="center">文章id</th>
 			
@@ -109,8 +106,8 @@ function doSearch(){
 			<td><input type="checkbox" value="" name="list_check" style="width:20px;height:20px;"/></td>
 			
 			<td>${blog.blog_title}</td>
-			<td><fmt:formatDate value="${blog.blog_ctime}" type="date" dateStyle="full"/></td>
-			<td><fmt:formatDate value="${blog.blog_utime}" type="date" dateStyle="full"/></td>
+			<td><fmt:formatDate value="${blog.blog_ctime }" type="date" dateStyle="long"/></td>
+			<td><fmt:formatDate value="${blog.blog_utime }" type="date" dateStyle="long"/></td>
 			<td>${blog.blog_vnum}</td>
 			<td>${blog.blog_id}</td>
 		</tr>
@@ -120,30 +117,31 @@ function doSearch(){
 				</div>
                 <div title="添加文章" style="padding:10px" id="win">
                 	<div class="easyui-panel" title="New Topic" style="width:100%;max-width:950px;padding:30px 60px;">
-		<form id="ff" class="easyui-form" method="post" data-options="novalidate:true">
+		<form id="ff" class="easyui-form" method="post" action="<%=path%>/manage_blog/add" >
 			<div style="margin-bottom:20px">
-				<input class="easyui-textbox" name="name" style="width:100%" data-options="label:'Name:',required:true">
+				<input class="easyui-textbox" name="blog_title" style="width:100%" data-options="label:'Title:',required:true">
 			</div>
-			<div style="margin-bottom:20px">
-				<input class="easyui-textbox" name="email" style="width:100%" data-options="label:'Email:',required:true,validType:'email'">
-			</div>
-			<div style="margin-bottom:20px">
-				<input class="easyui-textbox" name="subject" style="width:100%" data-options="label:'Subject:',required:true">
-			</div>
-			<div style="margin-bottom:20px">
-           
-		<textarea cols="80" id="editor1" name="editor1" rows="10" >&lt;p&gt;This is some &lt;strong&gt;sample text&lt;/strong&gt;. You are using CKEditor&lt;/a&gt;.&lt;/p&gt;
-	</textarea>
 
-	<script>
-		CKEDITOR.replace( 'editor1', {
-			uiColor: '#e5efff'
-		} );
-	</script>
-			</div>
 			<div style="margin-bottom:20px">
-				<select class="easyui-combobox" name="language" label="Language" style="width:100%"><option value="ar">Arabic</option><option value="bg">Bulgarian</option><option value="ca">Catalan</option><option value="zh-cht">Chinese Traditional</option></select>
+				<input class="easyui-textbox" name="blog_tag" style="width:100%" data-options="label:'Tag:',required:true">
 			</div>
+			
+			<div style="margin-bottom:20px">         
+			<textarea cols="80" id="editor1" name="blog_content" rows="10" >&lt;p&gt;This is some &lt;strong&gt;sample text&lt;/strong&gt;. You are using CKEditor&lt;/a&gt;.&lt;/p&gt;</textarea>
+			<script>
+				CKEDITOR.replace( 'editor1', {
+					uiColor: '#e5efff'
+				} );
+			</script>
+			</div>
+			
+			<div style="margin-bottom:20px">
+				<select class="easyui-combobox" name="blog_subject" label="分类" style="width:100%" contenteditable="false">
+				<option value="技术">技术</option>
+				<option value="抒情">抒情</option>
+				</select>
+			</div>
+			<input type="submit" value="哈哈"/>
 		</form>
 		<div style="text-align:center;padding:5px 0">
 			<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()" style="width:80px">Submit</a>
@@ -152,11 +150,7 @@ function doSearch(){
 	</div>
 	<script>
 		function submitForm(){
-			$('#ff').form('submit',{
-				onSubmit:function(){
-					return $(this).form('enableValidation').form('validate');
-				}
-			});
+			$('#ff').submit();
 		}
 		function clearForm(){
 			$('#ff').form('clear');

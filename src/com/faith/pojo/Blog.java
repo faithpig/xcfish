@@ -18,6 +18,8 @@ public class Blog {
 
 	private String blog_id;//博客id
 	private String blog_title;//博客标题
+	private String blog_subject;//博客分类
+	private String blog_tag;//博客标签
 	private String blog_content;//博客内容
 	private Date blog_ctime;//博客创建时间
 	private Date blog_utime;//博客最近更新时间
@@ -79,6 +81,24 @@ public class Blog {
 	
 	public void setBlog_vnum(long blog_vnum) {
 		this.blog_vnum = blog_vnum;
+	}
+
+	@Column(nullable = true)
+	public String getBlog_subject() {
+		return blog_subject;
+	}
+
+	public void setBlog_subject(String blog_subject) {
+		this.blog_subject = blog_subject;
+	}
+
+	@Column(nullable = true)
+	public String getBlog_tag() {
+		return blog_tag;
+	}
+
+	public void setBlog_tag(String blog_tag) {
+		this.blog_tag = blog_tag;
 	}
 	
 	
