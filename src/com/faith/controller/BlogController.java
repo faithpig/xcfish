@@ -3,6 +3,7 @@ package com.faith.controller;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,9 +16,8 @@ import com.faith.pojo.Blog;
 import com.faith.service.inter.IBlogService;
 
 @Controller
-@Scope("prototype")
+//@Scope("prototype") 无需设置为多例模式
 public class BlogController {
-	
 	
 	private IBlogService bloSer;
 	
@@ -39,7 +39,7 @@ public class BlogController {
 	@RequestMapping(path="/manage_blog/list")
 	public String list_blog(HttpServletRequest request,Model model){
 		model.addAttribute("list",bloSer.findAll());
-		return "manage_blog_list";
+		return "manage/admin";
 	}
 	
 	//添加文章
@@ -74,6 +74,7 @@ public class BlogController {
 	}
 	
 	@Autowired
+	@Qualifier("blogService")
 	public void setBloSer(IBlogService bloSer) {
 		this.bloSer = bloSer;
 	}

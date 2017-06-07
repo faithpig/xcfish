@@ -72,7 +72,7 @@ public class Blog {
 		this.blog_utime = blog_utime;
 	}
 	
-	@Column(nullable = false, columnDefinition="LONG default 0")
+	@Column(nullable = false)
 	public long getBlog_vnum() {
 		return blog_vnum;
 	}

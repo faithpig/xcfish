@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.faith.dao.inter.IBlogDao;
 import com.faith.pojo.Blog;
 
-@Repository
+@Repository("blogDao")
 public class BlogDao extends HibernateDaoSupport implements IBlogDao {
 
 	@Override

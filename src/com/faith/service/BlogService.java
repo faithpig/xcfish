@@ -3,6 +3,7 @@ package com.faith.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.faith.dao.inter.IBlogDao;
@@ -10,7 +11,7 @@ import com.faith.pojo.Blog;
 import com.faith.service.inter.IBlogService;
 
 
-@Service
+@Service("blogService")
 public class BlogService implements IBlogService{
 	
 	private IBlogDao bloDao;
@@ -45,6 +46,7 @@ public class BlogService implements IBlogService{
 	}
 
 	@Autowired
+	@Qualifier("blogDao")
 	public void setBloDao(IBlogDao bloDao) {
 		this.bloDao = bloDao;
 	}
