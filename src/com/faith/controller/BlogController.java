@@ -50,12 +50,12 @@ public class BlogController {
 	
 	//添加文章
 	@RequestMapping(path="/manage_blog/add", method = RequestMethod.POST)
-	public String add_blog(Blog b,Model model){
+	public String add_blog(Blog b,Model model,RedirectAttributes attr){
 		if(b!=null) {
 			b.setBlog_ctime(new Date());
 			b.setBlog_vnum(0);
 			b = bloSer.save(b);
-			model.addAttribute("flag",b.getBlog_id()!=null?"添加成功":"添加失败！");
+			attr.addAttribute("flag",b.getBlog_id()!=null?"添加成功":"添加失败！");
 		}else{
 			model.addAttribute("blog",b);
 			return "manage/admin";
@@ -72,10 +72,10 @@ public class BlogController {
 	
 	//更新文章
 	@RequestMapping(path="/manage_blog/update", method = RequestMethod.POST)
-	public String upd_blog(Blog b,Model model){//requestbody注解可自动解析前台传来的json对象为javabean对象
+	public String upd_blog(Blog b,Model model,RedirectAttributes attr){//requestbody注解可自动解析前台传来的json对象为javabean对象
 		if(b!=null) {
 			b.setBlog_utime(new Date());
-			model.addAttribute("flag",bloSer.update(b)?"更新成功":"更新失败！");
+			attr.addAttribute("flag",bloSer.update(b)?"更新成功":"更新失败！");
 		}
 		else{
 			model.addAttribute("blog",b);

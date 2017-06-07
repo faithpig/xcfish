@@ -36,7 +36,7 @@ public class Blog {
 		this.blog_id = blog_id;
 	}
 	
-	@Column(length = 20,nullable = false,unique = true)
+	@Column(nullable = false,unique = true)
 	public String getBlog_title() {
 		return blog_title;
 	}

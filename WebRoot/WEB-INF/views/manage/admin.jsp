@@ -136,12 +136,11 @@ function doSearch(){
 			</div>
 			
 			<div style="margin-bottom:20px">
-				<select class="easyui-combobox" name="blog_subject" label="分类" style="width:100%" contenteditable="false">
+				<select class="easyui-combobox" name="blog_subject" label="分类" style="width:100%" contenteditable="false" disabled="disabled">
 				<option value="技术">技术</option>
 				<option value="抒情">抒情</option>
 				</select>
 			</div>
-			<input type="submit" value="哈哈"/>
 		</form>
 		<div style="text-align:center;padding:5px 0">
 			<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()" style="width:80px">Submit</a>
@@ -150,7 +149,15 @@ function doSearch(){
 	</div>
 	<script>
 		function submitForm(){
-			$('#ff').submit();
+			$('#ff').form('submit', {
+			    onSubmit: function(){
+					// do some check
+					// return false to prevent submit;
+			    },
+			    success:function(data){
+					alert(${flag})
+			    }
+			});
 		}
 		function clearForm(){
 			$('#ff').form('clear');

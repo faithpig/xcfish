@@ -1,5 +1,6 @@
 package com.faith.service;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +14,17 @@ import com.faith.service.inter.IBlogService;
 
 
 @Service("blogService")
+@Transactional
 public class BlogService implements IBlogService{
 	
 	private IBlogDao bloDao;
 
 	@Override
 	public Blog save(Blog b) {
-		return bloDao.add(b);
+		Serializable id = bloDao.add(b);
+		if(id==null) 
+			return new Blog();
+		return findById(id.toString());
 	}
 
 	@Override

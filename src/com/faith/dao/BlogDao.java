@@ -1,13 +1,17 @@
 package com.faith.dao;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.HibernateException;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
-import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.faith.dao.inter.IBlogDao;
 import com.faith.pojo.Blog;
@@ -15,25 +19,22 @@ import com.faith.pojo.Blog;
 @Repository("blogDao")
 public class BlogDao implements IBlogDao {
 	
-	private HibernateTemplate hibernateTemplate;
-
+	@Autowired
+	@Qualifier("sessionFactory")
+	private SessionFactory sessionFactory;
+	
 	@Override
-	public Blog add(Blog entity) {
-		String saveId = null;
-		try{
-			saveId = (String) getHibernateTemplate().save(entity);
-		}
-		catch (DataAccessException e) {
-			return new Blog();
-		}
-		return findById(saveId);
+	public Serializable add(Blog entity) {
+		Serializable saveId = null;
+		saveId = (String) sessionFactory.getCurrentSession().save(entity);
+		return saveId;
 	}
 
 	@Override
 	public boolean delete(String id) {
 		try {
-			getHibernateTemplate().delete(findById(id));
-		} catch (DataAccessException e) {
+			sessionFactory.getCurrentSession().delete(findById(id));
+		} catch (HibernateException e) {
 			return false;
 		}
 		return true;
@@ -41,8 +42,8 @@ public class BlogDao implements IBlogDao {
 
 	@Override
 	public Blog findById(String id) {
-		List<?> result= getHibernateTemplate().findByNamedParam
-				("from Blog where blog_id = :blog_id order by blog_ctime desc", "blog_id", id);
+		List<?> result= sessionFactory.getCurrentSession().createQuery
+				("from Blog where blog_id = '"+id+"' order by blog_ctime desc").list();
 		if(result.size()>=1) 
 			return (Blog) result.get(0);
 		else 
@@ -52,8 +53,8 @@ public class BlogDao implements IBlogDao {
 	@Override
 	public boolean update(Blog entity) {
 		try {
-			getHibernateTemplate().update(entity);
-		} catch (DataAccessException e) {
+			sessionFactory.getCurrentSession().update(entity);
+		} catch (HibernateException e) {
 			return false;
 		}
 		return true;
@@ -61,8 +62,8 @@ public class BlogDao implements IBlogDao {
 
 	@Override
 	public List<Blog> findByTitle(String title) {
-		List<?> result= getHibernateTemplate().findByNamedParam
-				("from Blog where title like ':title' order by blog_ctime desc", "title", '%'+title+'%');
+		List<?> result= sessionFactory.getCurrentSession().createQuery
+				("from Blog where title like '%"+title+"%' order by blog_ctime desc").list();
 		if(result.size()>=1) 
 			return (List<Blog>) result;
 		else 
@@ -71,22 +72,11 @@ public class BlogDao implements IBlogDao {
 
 	@Override
 	public List<Blog> findAll() {
-		List<?> result= getHibernateTemplate().find("from Blog order by blog_ctime desc");
+		List<?> result= sessionFactory.getCurrentSession().createQuery("from Blog order by blog_ctime desc").list();
 		if(result.size()>=1) 
 			return (List<Blog>) result;
 		else 
 			return new ArrayList<Blog>();
 	}
 
-	
-	public HibernateTemplate getHibernateTemplate() {
-		return this.hibernateTemplate;
-	}
-
-	@Autowired
-	@Qualifier("hibernateTemplate")
-	public void setHibernateTemplate(HibernateTemplate hibernateTemplate) {
-		this.hibernateTemplate = hibernateTemplate;
-	}
-	
 }

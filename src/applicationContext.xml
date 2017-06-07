@@ -12,14 +12,21 @@
 		 http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
 		 http://www.springframework.org/schema/tx 
          http://www.springframework.org/schema/tx/spring-tx.xsd"> <!-- default-autowire="byName" 是为了在注解里也能注入sessionFactory -->
+         
+	<!-- 必须交由此上下文托管，因为父上下文负责事务管理 -->
 
+	<context:component-scan base-package="com.faith.service"/>
+	<context:component-scan base-package="com.faith.dao"/>
+
+	
 	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
-		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
 		<property name="url" value="jdbc:mysql://localhost:3306/xcfish?serverTimezone=UTC" />
 		<property name="username" value="faithfish" />
 		<property name="password" value="faithfish" />
 		<property name="initialSize" value="5" />
 		<property name="maxTotal" value="10" />
+		<property name="defaultReadOnly" value="false" />
 	</bean>
 
 	<bean id="sessionFactory"
@@ -44,23 +51,6 @@
 	<bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
-
-<bean id="hibernateTemplate" class="org.springframework.orm.hibernate5.HibernateTemplate">  
-  <property name="sessionFactory" ref="sessionFactory"/>  
-</bean>
-
-	<tx:advice id="txAdvice" transaction-manager="txManager">
-		<tx:attributes>
-			<tx:method name="save*" propagation="REQUIRED"/>
-			<tx:method name="delete*" propagation="REQUIRED" />
-			<tx:method name="update*" propagation="REQUIRED" />
-			<tx:method name="find*" read-only="true" propagation="NOT_SUPPORTED" />
-		</tx:attributes>
-	</tx:advice>
-	
-	<aop:config>
-    <aop:pointcut id="allServiceMethod" expression="execution(* com.faith.service..*.*(..))"/>
-    	<aop:advisor pointcut-ref="allServiceMethod" advice-ref="txAdvice"/>
-    </aop:config>
+ 	<tx:annotation-driven transaction-manager="transactionManager"/> 
 
 </beans>
