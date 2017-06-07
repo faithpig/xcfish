@@ -11,7 +11,8 @@
 		 http://www.springframework.org/schema/aop 
 		 http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
 		 http://www.springframework.org/schema/tx 
-         http://www.springframework.org/schema/tx/spring-tx.xsd">
+         http://www.springframework.org/schema/tx/spring-tx.xsd"
+         default-autowire="byName"> <!-- default-autowire="byName" 是为了在注解里也能注入sessionFactory -->
 
 	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
@@ -33,7 +34,6 @@
 		<property name="hibernateProperties">
 			<props>
 				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
-				
 				<prop key="hibernate.show_sql">true</prop>
 				<prop key="hibernate.format_sql">true</prop>
 				<prop key="hibernate.hbm2ddl.auto">update</prop>

@@ -3,17 +3,20 @@
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="UTF-8">
 	<base href="<%=basePath%>">
 	<title>xcfish后台管理系统</title>
-	<link rel="stylesheet" type="text/css" href="themes/default/easyui.css">
-	<link rel="stylesheet" type="text/css" href="themes/icon.css">
-	<link rel="stylesheet" type="text/css" href="css/demo.css">
-	<script type="text/javascript" src="js/jquery.min.js"></script>
-	<script type="text/javascript" src="js/jquery.easyui.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="<%=path %>/manage/themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="<%=path %>/manage/themes/icon.css">
+	<link rel="stylesheet" type="text/css" href="<%=path %>/manage/css/demo.css">
+	<script type="text/javascript" src="<%=path %>/manage/js/jquery.min.js"></script>
+	<script type="text/javascript" src="<%=path %>/manage/js/jquery.easyui.min.js"></script>
+	<script src="http://cdn.ckeditor.com/4.7.0/standard-all/ckeditor.js"></script>
 </head>
 <body>
 	<h2>xcfish后台管理系统</h2><hr>
@@ -38,13 +41,13 @@ function confirm1(){
 			});
 		}
 </script>
-<a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-more" onClick="$('#win2').window('open')">list</a>
+<a href="javascript:void(0)" class="easyui-linkbutton" plain="true" iconCls="icon-more" onClick="$('#win2').window('open')">list</a>
 <br>
-	<a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-add" onClick="$('#win').window('open')">add</a>
+	<a href="javascript:void(0)" class="easyui-linkbutton" plain="true" iconCls="icon-add" onClick="$('#win').window('open')">add</a>
     <br>
-	<a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-remove" onclick="confirm1();">remove</a>
+	<a href="javascript:void(0)" class="easyui-linkbutton" plain="true" iconCls="icon-remove" onclick="confirm1();">remove</a>
     <br>
-	<a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-edit" onClick="$('#win').window('open')">edit</a>
+	<a href="javascript:void(0)" class="easyui-linkbutton" plain="true" iconCls="icon-edit" onClick="$('#win').window('open')">edit</a>
 
 
 
@@ -63,9 +66,9 @@ function confirm1(){
 				<div title="文章列表" style="padding:5px" id="win2">
                 	<div style="padding:5px 0;">
 		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onClick="$('#win').window('open')">Add</a>
-		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove'" onclick="confirm1();">Remove</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove'" onclick="confirm1();">Remove</a>
 
-		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit'" onClick="$('#win').window('open')">Edit</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-edit'" onClick="$('#win').window('open')">Edit</a>
 	</div>
 
 <div id="tb" style="padding:3px">
@@ -84,19 +87,34 @@ function doSearch(){
 </script>
 </div>
 <table id="tt" class="easyui-datagrid" style="width:950px;height:400px"
-		url="datagrid2_getdata.php"
+		url=""
 		title="Load Data" iconCls="icon-save"
 		rownumbers="true" pagination="true">
 	<thead>
 		<tr>
-			<th field="itemid" width="80">Item ID</th>
-			<th field="productid" width="80">Product ID</th>
-			<th field="listprice" width="80" align="right">List Price</th>
-			<th field="unitcost" width="80" align="right">Unit Cost</th>
-			<th field="attr1" width="150">Attribute</th>
-			<th field="status" width="60" align="center">Stauts</th>
+			
+			<th field="选择" width="30"></th>
+			
+			<th field="文章标题" width="350" align="center">文章标题</th>
+			<th field="创建时间" width="90" align="center">创建时间</th>
+			<th field="更新时间" width="90" align="center">更新时间</th>
+			<th field="浏览量" width="50" align="center">浏览量</th>
+			<th field="文章id" width="300" align="center">文章id</th>
+			
 		</tr>
+
 	</thead>
+	<c:forEach items="${list}" var="blog" varStatus="status">
+		<tr>
+			<td><input type="checkbox" value="" name="list_check" style="width:20px;height:20px;"/></td>
+			
+			<td>${blog.blog_title}</td>
+			<td><fmt:formatDate value="${blog.blog_ctime}" type="date" dateStyle="full"/></td>
+			<td><fmt:formatDate value="${blog.blog_utime}" type="date" dateStyle="full"/></td>
+			<td>${blog.blog_vnum}</td>
+			<td>${blog.blog_id}</td>
+		</tr>
+	</c:forEach>
 </table>
 					
 				</div>
@@ -113,7 +131,7 @@ function doSearch(){
 				<input class="easyui-textbox" name="subject" style="width:100%" data-options="label:'Subject:',required:true">
 			</div>
 			<div style="margin-bottom:20px">
-            <script src="http://cdn.ckeditor.com/4.7.0/standard-all/ckeditor.js"></script>
+           
 		<textarea cols="80" id="editor1" name="editor1" rows="10" >&lt;p&gt;This is some &lt;strong&gt;sample text&lt;/strong&gt;. You are using CKEditor&lt;/a&gt;.&lt;/p&gt;
 	</textarea>
 
