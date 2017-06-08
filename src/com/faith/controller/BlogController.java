@@ -1,6 +1,7 @@
 package com.faith.controller;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.faith.pojo.Blog;
@@ -41,11 +43,18 @@ public class BlogController {
 		return "blog_detail";
 	}
 	
-	//后台查看所有文章
-	@RequestMapping(path="/manage_blog/list")
+	//后台查看文章页面
+	@RequestMapping(path="/manage_blog/list", method = {RequestMethod.GET,RequestMethod.POST})
 	public String list_blog(HttpServletRequest request,Model model){
 		model.addAttribute("list",bloSer.findAll());
 		return "manage/admin";
+	}
+	
+	//后台文章列表json数据
+	@ResponseBody
+	@RequestMapping(path="/manage_blog/list_data")
+	public List<Blog> data(){
+		return bloSer.findAll();
 	}
 	
 	//添加文章
@@ -60,7 +69,7 @@ public class BlogController {
 			model.addAttribute("blog",b);
 			return "manage/admin";
 		}
-		return "redirect:/manage_blog/list";
+		return "redirect:list";
 	}
 	
 	//删除文章
@@ -79,7 +88,7 @@ public class BlogController {
 		}
 		else{
 			model.addAttribute("blog",b);
-			return "manage/admin";
+			return "manage/ admin";
 		}
 		return "redirect:/manage_blog/list";
 	}

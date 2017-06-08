@@ -86,38 +86,24 @@ function doSearch(){
 }
 </script>
 </div>
-<table id="tt" class="easyui-datagrid" style="width:950px;height:400px" url="" title="Load Data" iconCls="icon-save" rownumbers="true" pagination="true">
+<table id="tt" class="easyui-datagrid" style="width:950px;height:400px" url="<%=path %>/manage_blog/list_data" title="Load Data" iconCls="icon-save" rownumbers="true" pagination="true">
 	<thead>
-		<tr>
+		<tr>		
 			
-			<th field="选择" width="30"></th>
-			
-			<th field="文章标题" width="340" align="center">文章标题</th>
-			<th field="创建时间" width="95" align="center">创建时间</th>
-			<th field="更新时间" width="95" align="center">更新时间</th>
-			<th field="浏览量" width="50" align="center">浏览量</th>
-			<th field="文章id" width="300" align="center">文章id</th>
-			
+			<th field="blog_title" width="340" align="center">文章标题</th>
+			<th field="blog_ctime" width="95" align="center">创建时间</th> 
+			<th field="blog_utime" width="95" align="center">更新时间</th>
+			<th field="blog_vnum" width="50" align="center">浏览量</th>
+			<th field="blog_id" width="300" align="center">文章id</th>			
 		</tr>
 
 	</thead>
-	<c:forEach items="${list}" var="blog" varStatus="status">
-		<tr>
-			<td><input type="checkbox" value="" name="list_check" style="width:20px;height:20px;"/></td>
-			
-			<td>${blog.blog_title}</td>
-			<td><fmt:formatDate value="${blog.blog_ctime }" type="date" dateStyle="long"/></td>
-			<td><fmt:formatDate value="${blog.blog_utime }" type="date" dateStyle="long"/></td>
-			<td>${blog.blog_vnum}</td>
-			<td>${blog.blog_id}</td>
-		</tr>
-	</c:forEach>
+
 </table>
-					
-				</div>
+</div>
                 <div title="添加文章" style="padding:10px" id="win">
                 	<div class="easyui-panel" title="New Topic" style="width:100%;max-width:950px;padding:30px 60px;">
-		<form id="ff" class="easyui-form" method="post" action="<%=path%>/manage_blog/add" >
+		<form id="ff" class="easyui-form" method="post" action="<%=path%>/manage_blog/add" data-options="novalidate:true">
 			<div style="margin-bottom:20px">
 				<input class="easyui-textbox" name="blog_title" style="width:100%" data-options="label:'Title:',required:true">
 			</div>
@@ -136,7 +122,7 @@ function doSearch(){
 			</div>
 			
 			<div style="margin-bottom:20px">
-				<select class="easyui-combobox" name="blog_subject" label="分类" style="width:100%" contenteditable="false" disabled="disabled">
+				<select class="easyui-combobox" name="blog_subject" label="分类" style="width:100%" contenteditable="false" >
 				<option value="技术">技术</option>
 				<option value="抒情">抒情</option>
 				</select>
@@ -151,11 +137,10 @@ function doSearch(){
 		function submitForm(){
 			$('#ff').form('submit', {
 			    onSubmit: function(){
-					// do some check
-					// return false to prevent submit;
+					return $(this).form('enableValidation').form('validate');
 			    },
 			    success:function(data){
-					alert(${flag})
+					alert($flag)
 			    }
 			});
 		}
