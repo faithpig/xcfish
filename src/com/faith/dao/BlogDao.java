@@ -21,12 +21,11 @@ public class BlogDao implements IBlogDao {
 	
 	@Autowired
 	@Qualifier("sessionFactory")
-	private SessionFactory sessionFactory;
+	private SessionFactory sessionFactory;//hibernate原生sessionFactory
 	
 	@Override
 	public Serializable add(Blog entity) {
-		Serializable saveId = null;
-		saveId = (String) sessionFactory.getCurrentSession().save(entity);
+		Serializable saveId = (String) sessionFactory.getCurrentSession().save(entity);
 		return saveId;
 	}
 
